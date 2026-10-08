@@ -1,0 +1,70 @@
+/* Hue Solver design tokens: neutral glass */
+:root {
+  --accent: #2378cc;
+  --accent-bg: rgba(35,120,204,0.12);
+  --accent-text: #0f5299;
+  --green: #4a8a1a;
+  --green-bg: rgba(74,138,26,0.12);
+  --green-text: #2d5c0e;
+  --amber: #c47c10;
+  --amber-bg: rgba(196,124,16,0.12);
+  --amber-text: #7a4d08;
+  --red: #c43030;
+  --red-bg: rgba(196,48,48,0.12);
+  --red-text: #7a1e1e;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --radius-xs: 8px;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, "Roboto Mono", monospace;
+  --nav-height: 58px;
+  --safe-top: env(safe-area-inset-top,0px);
+  --safe-bottom: env(safe-area-inset-bottom,0px);
+}
+
+/* LIGHT — macOS/iOS frosted glass */
+body.theme-light {
+  --grad-start: #d1d1d6;
+  --grad-mid:   #e8e8ed;
+  --grad-end:   #d8d8dc;
+  --on-grad:    #1c1c1e;
+  --on-grad-2:  rgba(28,28,30,0.5);
+  --text:       #1c1c1e;
+  --text2:      #48484a;
+  --text3:      #8e8e93;
+  --border:     rgba(0,0,0,0.1);
+  --separator:  rgba(0,0,0,0.06);
+  --glass:      rgba(255,255,255,0.5);
+  --glass-strong: rgba(255,255,255,0.75);
+  --glass-border: rgba(255,255,255,0.65);
+  --glass-blur: blur(28px) saturate(200%);
+  --glass-shadow: 0 2px 20px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.8);
+}
+
+/* DARK — iOS dark */
+body.theme-dark {
+  --grad-start: #1c1c1e;
+  --grad-mid:   #2c2c2e;
+  --grad-end:   #1c1c1e;
+  --on-grad:    #f2f2f7;
+  --on-grad-2:  rgba(242,242,247,0.45);
+  --text:       #f2f2f7;
+  --text2:      rgba(242,242,247,0.6);
+  --text3:      rgba(242,242,247,0.35);
+  --border:     rgba(255,255,255,0.08);
+  --separator:  rgba(255,255,255,0.05);
+  --glass:      rgba(255,255,255,0.07);
+  --glass-strong: rgba(255,255,255,0.13);
+  --glass-border: rgba(255,255,255,0.1);
+  --glass-blur: blur(28px) saturate(180%);
+  --glass-shadow: 0 2px 20px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.07);
+  --accent:       #0a84ff;
+  --accent-bg:    rgba(10,132,255,0.15);
+  --accent-text:  #5ac8fa;
+  --green-text:   #30d158;
+  --amber-text:   #ffd60a;
+  --red-text:     #ff453a;
+  --green-bg:     rgba(48,209,88,0.12);
+  --amber-bg:     rgba(255,214,10,0.12);
+  --red-bg:       rgba(255,69,58,0.12);
+}

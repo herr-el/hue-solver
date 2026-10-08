@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; worker-src 'self'; style-src 'self'; img-src 'self' blob: data:; font-src 'self'; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hue Solver</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Hue Solver">
+<meta name="theme-color" content="#e8e8ed" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1c1c1e" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/app.css">
+</head>
+<body class="theme-light">
+<header class="topbar glass">
+  <h1>Hue Solver</h1>
+  <div class="top-actions">
+    <button id="btn-peek" class="icon-btn" hidden data-i18n-attr="aria-label:peek;title:peek">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7S1 12 1 12z"/><circle cx="12" cy="12" r="3"/></svg>
+    </button>
+    <button id="btn-new" class="chip" hidden data-i18n="new">New</button>
+    <button id="btn-settings" class="chip chip-quiet" data-i18n="settings">Settings</button>
+  </div>
+</header>
+
+<!-- Start -->
+<section id="view-start" class="start" hidden>
+  <div class="card glass">
+    <div class="hero-grid" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <h2 data-i18n="startTitle">Screenshot in, solution out</h2>
+    <p class="muted" data-i18n-html="startText"></p>
+    <label class="btn primary" for="file" data-i18n="chooseBtn">Choose screenshots</label>
+    <p id="start-note" class="note" hidden></p>
+    <p class="muted small desk-hint" data-i18n-html="deskHint"></p>
+    <button id="btn-how" class="link" data-i18n="howLink">How does it work?</button>
+    <input id="file" type="file" accept="image/*" multiple hidden>
+  </div>
+</section>
+
+<!-- Analyse -->
+<section id="view-busy" class="start" hidden>
+  <div class="card glass"><div class="spinner"></div><p id="busy-text" data-i18n="busy">Analysing image …</p></div>
+</section>
+
+<!-- Ergebnis -->
+<section id="view-result" class="result" hidden>
+  <div class="stage" id="stage"><canvas id="board"></canvas></div>
+
+  <aside class="panel glass" id="panel">
+    <div class="panel-row">
+      <button id="prev" class="round" data-i18n-attr="aria-label:prev">‹</button>
+      <div class="stepinfo">
+        <b id="step-no">–</b>
+        <span id="step-sub">–</span>
+      </div>
+      <button id="next" class="round primary" data-i18n-attr="aria-label:next">›</button>
+    </div>
+    <div class="progress"><i id="progress-bar"></i></div>
+    <input id="scrub" class="desk-only" type="range" min="0" max="0" value="0" data-i18n-attr="aria-label:scrub">
+
+    <div id="warn" class="warn" hidden>
+      <button id="warn-close" class="warn-x" data-i18n-attr="aria-label:warnClose">×</button>
+      <div id="warn-text"></div>
+      <button id="btn-fix" class="chip" data-i18n="fixBtn">Correct fixed tiles</button>
+    </div>
+    <div id="fix-bar" class="fixbar" hidden>
+      <span data-i18n="fixHint">Tap tiles: fixed ↔ free</span>
+      <button id="btn-fix-done" class="chip" data-i18n="fixDone">Done</button>
+    </div>
+
+    <div class="desk-only desk-extra">
+      <div class="mini-head"><span data-i18n="target">Target</span><span id="details" class="muted"></span></div>
+      <canvas id="mini"></canvas>
+      <p class="keys muted" data-i18n-html="keys"></p>
+    </div>
+  </aside>
+</section>
+
+<div id="drop" class="drop" hidden><div data-i18n="drop">Release screenshot</div></div>
+
+<!-- Intro -->
+<div id="sheet-intro" class="sheet-backdrop" hidden>
+  <div class="sheet glass" role="dialog" aria-modal="true" aria-labelledby="intro-title">
+    <h2 id="intro-title" data-i18n="introTitle">How it works</h2>
+    <p class="muted" data-i18n="introLead"></p>
+    <ol class="steps">
+      <li><span class="step-n">1</span><div><b data-i18n="introS1t"></b><p class="muted small" data-i18n="introS1"></p></div></li>
+      <li><span class="step-n">2</span><div><b data-i18n="introS2t"></b><p class="muted small" data-i18n="introS2"></p></div></li>
+      <li><span class="step-n">3</span><div><b data-i18n="introS3t"></b><p class="muted small" data-i18n="introS3"></p></div></li>
+    </ol>
+    <p class="note" data-i18n="introNote"></p>
+    <button id="intro-ok" class="btn primary" data-i18n="introOk">Got it</button>
+  </div>
+</div>
+
+<!-- Settings -->
+<div id="sheet-settings" class="sheet-backdrop" hidden>
+  <div class="sheet glass" role="dialog" aria-modal="true" aria-labelledby="set-title">
+    <h2 id="set-title" data-i18n="setTitle">Settings</h2>
+
+    <section class="set-row">
+      <h3 data-i18n="setLang">Language</h3>
+      <div class="seg" id="seg-lang"></div>
+    </section>
+
+    <section class="set-row">
+      <h3 data-i18n="setTheme">Appearance</h3>
+      <div class="seg" id="seg-theme">
+        <button data-theme="auto" data-i18n="themeAuto">Auto</button>
+        <button data-theme="light" data-i18n="themeLight">Light</button>
+        <button data-theme="dark" data-i18n="themeDark">Dark</button>
+      </div>
+    </section>
+
+    <section class="set-row">
+      <h3 data-i18n="setDim">Focus effect</h3>
+      <div class="seg" id="seg-dim">
+        <button data-dim="off" data-i18n="dimOff">Off</button>
+        <button data-dim="dark" data-i18n="dimDark">Darken</button>
+        <button data-dim="fade" data-i18n="dimFade">Lighten</button>
+      </div>
+      <div id="dim-amt-row">
+        <h3><span data-i18n="setDimAmt">Strength</span> <output id="set-dim-val" class="batch-val"></output></h3>
+        <input id="set-dim-amt" type="range" min="5" max="50" step="5">
+      </div>
+      <p class="muted small" data-i18n="setDimHint"></p>
+    </section>
+
+    <section class="set-row">
+      <h3><span data-i18n="setBatch">Moves per round</span> <output id="set-batch-val" class="batch-val"></output></h3>
+      <input id="set-batch" type="range" min="1" max="10" step="1">
+      <p class="muted small" data-i18n="setBatchHint"></p>
+    </section>
+
+    <section class="set-row">
+      <h3 data-i18n="setAbout">About &amp; legal</h3>
+      <p class="muted small" data-i18n="aboutDisclaimer"></p>
+      <p class="muted small" data-i18n="aboutPrivacy"></p>
+      <div id="legal" class="muted small" hidden>
+        <b data-i18n="legalTitle">Legal notice</b>
+        <div id="legal-body"></div>
+      </div>
+      <button id="set-how" class="link" data-i18n="setHow">How does it work?</button>
+    </section>
+
+    <button id="set-done" class="btn primary" data-i18n="setDone">Done</button>
+  </div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>
