@@ -1,7 +1,7 @@
 {
   "name": "huesolver",
   "version": "1.0.0",
-  "description": "Solve I Love Hue Too puzzles from a screenshot: static, client-only PWA",
+  "description": "Solve I Love Hue and I Love Hue Too puzzles from a screenshot: static, client-only PWA",
   "scripts": {
     "test": "node --test test/*.test.js"
   },

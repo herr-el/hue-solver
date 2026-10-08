@@ -1,11 +1,7 @@
 # Third-party notices
 
-Everything shipped with Hue Solver is original code under the MIT licence (see `LICENSE`). The app uses the device's built-in system fonts and bundles no third-party code or fonts.
+All code shipped with Hue Solver is original and MIT-licensed (see `LICENSE`). It uses the fonts already installed on your device and bundles no third-party code.
 
-## Development only (not shipped)
+The tests use [`pngjs`](https://github.com/pngjs/pngjs) (MIT) to read PNG files; it is not part of the app.
 
-- [`pngjs`](https://github.com/pngjs/pngjs) (MIT), used by the tests to read the PNG fixtures.
-
-## Game
-
-“I Love Hue Too” and its artwork belong to their respective owners. This project is not affiliated with or endorsed by them. The screenshots in `test-fixtures/` are used only to test image detection; their metadata has been removed.
+“I Love Hue” and “I Love Hue Too” and their artwork belong to their respective owners. This project is not affiliated with or endorsed by them. The screenshots in `test-fixtures/` are used only to test image detection.
